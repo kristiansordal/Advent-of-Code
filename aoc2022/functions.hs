@@ -29,6 +29,13 @@ parseNumWord s =
       num = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
    in (head word, head num)
 
+parseStrSet :: String -> (Set Char, Set Char)
+parseStrSet s =
+  let l = length s `div` 2
+      f = Set.fromList $ take l s
+      h = Set.fromList $ drop l s
+   in (f, h)
+
 type Graph n = Map n (Set n)
 
 -- create a graph
