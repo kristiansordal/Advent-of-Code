@@ -4,7 +4,7 @@ import Data.Set qualified as Set
 import Functions
 
 main = do
-  input <- map parseStrSet . lines <$> readFile "day3.in"
+  input <- map parseStrSet . lines <$> readFile "input/day3.in"
   let alph = Set.fromList "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
       ansP1 = getPrio input alph 0
       ansP2 = getGroupCommon (map (uncurry Set.union) input) alph 0

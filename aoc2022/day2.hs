@@ -1,7 +1,7 @@
 import Data.Bifunctor
 
 main = do
-  input <- map parse . lines <$> readFile "day2.in"
+  input <- map parse . lines <$> readFile "input/day2.in"
   let nums = map (Data.Bifunctor.bimap parseNum parseNum) input
   print nums
   let ansP1 = rps nums
