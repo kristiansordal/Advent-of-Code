@@ -7,6 +7,14 @@ import Data.Set (Set)
 import Data.Set qualified as Set
 import Text.Regex
 
+parseGroup :: [String] -> [Integer] -> [[Integer]]
+parseGroup [] ys = [ys]
+parseGroup (x : xs) ys
+  | x == "" = ys : parseGroup xs []
+  | otherwise =
+      let num = read x
+       in parseGroup xs ((:) num ys)
+
 parseNum :: String -> Integer
 parseNum = read
 
@@ -16,9 +24,7 @@ parseTup s =
    in (head tup, last tup)
 
 parseNums :: String -> [Integer]
-parseNums s =
-  let nums = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
-   in nums
+parseNums = map read . filter (/= "") . splitRegex (mkRegex "[^0-9]")
 
 parseTupParen :: String -> (Integer, Integer)
 parseTupParen s =
