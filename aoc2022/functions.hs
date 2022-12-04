@@ -15,6 +15,11 @@ parseTup s =
   let tup = map read $ splitOn "," s
    in (head tup, last tup)
 
+parseNums :: String -> [Integer]
+parseNums s =
+  let nums = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
+   in nums
+
 parseTupParen :: String -> (Integer, Integer)
 parseTupParen s =
   let nums = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
