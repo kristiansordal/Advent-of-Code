@@ -11,7 +11,7 @@ getOverlaps :: (Eq a, Num t, Enum a) => [[a]] -> t -> ((a -> Bool) -> [a] -> Boo
 getOverlaps [] n f = n
 getOverlaps (x : xs) n f =
   let l1 = [(head x) .. (x !! 1)]
-      l2 = [(x !! 2) .. (x !! 3)]
+      l2 = [(x !! 2) .. (last x)]
    in if f ((== True) . (`elem` l1)) l2 || f ((== True) . (`elem` l2)) l1
         then getOverlaps xs (n + 1) f
         else getOverlaps xs n f
