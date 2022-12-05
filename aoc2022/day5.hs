@@ -1,12 +1,13 @@
 import Functions
+import System.Console.ANSI
 
 main = do
   stack <- lines <$> readFile "input/day5_1.in"
-  moves <- map parseNums . lines <$> readFile "input/day5.in"
+  moves <- map parseList . lines <$> readFile "input/day5.in"
   let ansP1 = moveCrates stack moves moveCrateOne
   let ansP2 = moveCrates stack moves moveCrateAll
-  putStrLn ansP1
-  putStrLn ansP2
+  putStrLn $ "\ESC[35mPart 1: " ++ ansP1
+  putStrLn $ "\ESC[33mPart 2: " ++ ansP2
 
 type Crates = [String]
 
