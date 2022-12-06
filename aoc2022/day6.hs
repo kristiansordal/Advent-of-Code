@@ -9,5 +9,5 @@ main = do
 
 getMarker :: String -> Int -> Int -> Int
 getMarker m c x
-  | length (nub (take x m)) == x = c + x
+  | length (nub $ take x m) == x = c + x
   | otherwise = getMarker (drop 1 m) (c + 1) x
