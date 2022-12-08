@@ -44,6 +44,9 @@ parseStrSet s =
       h = Set.fromList $ drop l s
    in (f, h)
 
+parseDig :: String -> [Integer]
+parseDig = map (\x -> read [x])
+
 type Graph n = Map n (Set n)
 
 -- create a graph
