@@ -37,6 +37,23 @@ parseNumWord s =
       num = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
    in (head word, head num)
 
+parseCharNum :: String -> (Char, Integer)
+parseCharNum s = (head $ head $ words s, read $ last $ words s)
+
+parseUDLR :: Char -> (Integer, Integer)
+parseUDLR c
+  | c == 'U' = (0, 1)
+  | c == 'D' = (0, -1)
+  | c == 'L' = (-1, 0)
+  | c == 'R' = (1, 0)
+
+parseMaybe :: String -> (String, Maybe Int)
+parseMaybe s
+  | length spl == 1 = (s, Nothing)
+  | otherwise = (head spl, Just $ read $ last spl)
+  where
+    spl = splitOn " " s
+
 parseStrSet :: String -> (Set Char, Set Char)
 parseStrSet s =
   let l = length s `div` 2
