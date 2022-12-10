@@ -17,13 +17,13 @@ main = do
 
 drawPixels :: [(Int, Int)] -> [String]
 drawPixels [] = []
-drawPixels c = drawLine (map (\(x, y) -> (x `mod` 40, y `mod` 40)) (take 40 c)) 0 [0, 1, 2] "" : drawPixels (drop 40 c)
+drawPixels c = drawLine (map (\(x, y) -> (x `mod` 40, y `mod` 40)) (take 40 c)) 1 [0, 1, 2] "" : drawPixels (drop 40 c)
 
 drawLine :: [(Int, Int)] -> Int -> [Int] -> String -> String
-drawLine c 40 spr s = s
+drawLine c 39 spr s = s
 drawLine c n spr s
-  | n + 1 `elem` spr' = drawLine c (n + 1) spr' (s ++ "█")
-  | otherwise = drawLine c (n + 1) spr' (s ++ ".")
+  | n `elem` spr = drawLine c (n + 1) spr' (s ++ "█")
+  | otherwise = drawLine c (n + 1) spr' (s ++ " ")
   where
     d = snd $ c !! n
     spr' = [d, d + 1, d + 2]
