@@ -5,11 +5,12 @@ import Functions
 import System.Console.ANSI
 
 main = do
-  input <- map (snd . parseMaybe) . lines <$> readFile "input/day10.in"
-  let cycles = cyc input [(1, 1)]
-      sum = cycSum cycles 0
-      s = drawPixels cycles
+  input <- words <$> readFile "input/day10.in"
+  let cycl = cycles input [(1, 1)]
+      sum = cycSum cycl 0
+      s = drawPixels cycl
 
+  print cycl
   print sum
   mapM_ printWithDelay (take 6 s)
 
@@ -39,13 +40,10 @@ cycSum c n
   | n `mod` 40 == 20 = snd (c !! (n - 1)) * fst (c !! (n - 1)) + cycSum c (n + 40)
   | otherwise = cycSum c (n + 20)
 
-cyc :: [Maybe Int] -> [(Int, Int)] -> [(Int, Int)]
-cyc [] c = c
-cyc (x : xs) c =
-  case x of
-    (Just n) -> cyc xs (c ++ [cyc1] ++ [cyc2])
-      where
-        cyc2 = (fst (last c) + 2, snd (last c) + n)
-    Nothing -> cyc xs (c ++ [cyc1])
+cycles :: [String] -> [(Int, Int)] -> [(Int, Int)]
+cycles [] c = c
+cycles (x : xs) c = cycles xs (c ++ [(fst (last c) + 1, snd (last c) + g x)])
   where
-    cyc1 = (fst (last c) + 1, snd $ last c)
+    g "addx" = 0
+    g "noop" = 0
+    g n = if head n == '-' then negate (read (tail n)) else read n

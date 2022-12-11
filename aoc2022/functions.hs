@@ -37,6 +37,12 @@ parseNumWord s =
       num = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
    in (head word, head num)
 
+parseNumsWord :: String -> ([String], [Integer])
+parseNumsWord s =
+  let word = filter (/= "") $ splitRegex (mkRegex "[^A-z*+]") s
+      num = map read $ filter (/= "") $ splitRegex (mkRegex "[^0-9]") s
+   in (word, num)
+
 parseCharNum :: String -> (Char, Integer)
 parseCharNum s = (head $ head $ words s, read $ last $ words s)
 
