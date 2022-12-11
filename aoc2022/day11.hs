@@ -1,8 +1,6 @@
 {-# OPTIONS_GHC -Wno-missing-fields #-}
 
-import Data.List
 import Data.List.Extra
-import Data.Maybe
 import Functions
 
 main = do
@@ -12,7 +10,6 @@ main = do
       turns = manyTurns 10000 monkies
       insps = product . take 2 . reverse . sort $ map inspections turns
   print insps
-  print "a"
 
 data Monkey = Monkey
   {num :: Integer, items :: [Integer], op :: ([String], Integer), test :: Integer, result :: (Integer, Integer), inspections :: Integer}
