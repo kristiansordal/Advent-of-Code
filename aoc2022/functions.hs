@@ -83,3 +83,16 @@ insertMany g n = foldr (edgeBetween n) g
 -- insert undirected edge
 edgeBetween :: (Ord n) => n -> n -> Graph n -> Graph n
 edgeBetween n1 n2 = Map.insertWith Set.union n2 (Set.singleton n1) . Map.insertWith Set.union n1 (Set.singleton n2)
+
+remove :: (Eq a) => [a] -> a -> Bool -> [a]
+remove [] n _ = []
+remove (x : xs) n b
+  | n == x && not b = remove xs n True
+  | not b = x : remove xs n False
+  | otherwise = x : remove xs n True
+
+update :: [a] -> a -> Integer -> [a]
+update l n x = nl
+  where
+    (f, s) = splitAt (fromIntegral x) l
+    nl = f ++ [n] ++ tail s

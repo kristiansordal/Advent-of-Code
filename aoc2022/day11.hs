@@ -6,13 +6,18 @@ import Functions
 main = do
   input <- splitOn "\n\n" <$> readFile "input/day11.in"
   let monke = map (splitOn "\n") input
-      monkies = parseMonkies monke
-      turns = manyTurns 10000 monkies
+      turns = manyTurns 10000 (parseMonkies monke)
       insps = product . take 2 . reverse . sort $ map inspections turns
   print insps
 
 data Monkey = Monkey
-  {num :: Integer, items :: [Integer], op :: ([String], Integer), test :: Integer, result :: (Integer, Integer), inspections :: Integer}
+  { num :: Integer,
+    items :: [Integer],
+    op :: ([String], Integer),
+    test :: Integer,
+    result :: (Integer, Integer),
+    inspections :: Integer
+  }
   deriving (Show)
 
 manyTurns :: Int -> [Monkey] -> [Monkey]
@@ -37,27 +42,11 @@ turn ms fromMonkey t
           ms'' = update ms' oldMonkey (num oldMonkey)
        in turn ms'' (ms'' !! fromIntegral (num oldMonkey)) t
 
-remove :: (Eq a) => [a] -> a -> Bool -> [a]
-remove [] n _ = []
-remove (x : xs) n b
-  | n == x && not b = remove xs n True
-  | not b = x : remove xs n False
-  | otherwise = x : remove xs n True
-
-update :: [a] -> a -> Integer -> [a]
-update l n x = nl
-  where
-    (f, s) = splitAt (fromIntegral x) l
-    nl = f ++ [n] ++ tail s
-
 operation :: ([String], Integer) -> Integer -> Integer
 operation op n
-  | v == 0 = n * n
-  | op' == "+" = v + n
-  | op' == "*" = v * n
-  where
-    op' = fst op !! 1
-    v = snd op
+  | snd op == 0 = n * n
+  | fst op !! 1 == "+" = snd op + n
+  | fst op !! 1 == "*" = snd op * n
 
 parseMonkies :: [[String]] -> [Monkey]
 parseMonkies = map (parseMonke Monkey {inspections = 0})
