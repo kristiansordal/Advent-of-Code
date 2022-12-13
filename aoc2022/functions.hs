@@ -18,6 +18,17 @@ parseGroup (x : xs) ys
 parseNum :: String -> Integer
 parseNum = read
 
+parseCharToNum :: String -> [Int]
+parseCharToNum [] = []
+parseCharToNum (x : xs)
+  | x == 'S' = 0 : parseCharToNum xs
+  | x == 'E' = 26 : parseCharToNum xs
+  | otherwise = case elemIndex x a of
+      (Just c) -> c : parseCharToNum xs
+      Nothing -> parseCharToNum xs
+  where
+    a = "abcdefghijklmnopqrstuvwxyz"
+
 parseTup :: String -> (Integer, Integer)
 parseTup s =
   let tup = map read $ splitOn "," s

@@ -58,10 +58,8 @@ def add_neighbours(map, toSearch, curr):
 
 def main():
 
-
     with open('input/day12.in') as f:
         grid_tile = [[c for c in line.strip()] for line in f]
-
 
     start = []
     end = []
@@ -75,7 +73,6 @@ def main():
                 end = [i, j]
             else:
                 grid_tile[i][j] = ord(grid_tile[i][j]) - 97
-
 
     dijkstra(grid_tile, end, start)
 
