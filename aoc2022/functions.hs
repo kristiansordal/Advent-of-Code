@@ -107,3 +107,13 @@ update l n x = nl
   where
     (f, s) = splitAt (fromIntegral x) l
     nl = f ++ [n] ++ tail s
+
+manhattan :: (Integer, Integer) -> (Integer, Integer) -> Integer
+manhattan (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
+
+seg :: (Integer, Integer) -> (Integer, Integer) -> [(Integer, Integer)]
+seg (x1, y1) (x2, y2)
+  | x1 == x2 && y1 <= y2 = [(x1, y) | y <- [y1 .. y2]]
+  | x1 == x2 && y1 >= y2 = [(x1, y) | y <- [y2 .. y1]]
+  | y1 == y2 && x1 <= x2 = [(x, y1) | x <- [x1 .. x2]]
+  | y1 == y2 && x1 >= x2 = [(x, y1) | x <- [x2 .. x1]]
