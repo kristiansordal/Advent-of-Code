@@ -5,7 +5,9 @@ import Functions
 main = do
   input <- map (parseBeacon . parseList) . lines <$> readFile "input/day15.in"
   let ansP1 = oneRow input 2000000 Set.empty
+  let ansP2 = map (\x -> oneRow input x Set.empty) [0 .. 4000000]
   print ansP1
+  print ansP2
 
 oneRow :: [[(Integer, Integer)]] -> Integer -> Set Integer -> Integer
 oneRow [] line set = fromIntegral $ length (Set.toList set)
