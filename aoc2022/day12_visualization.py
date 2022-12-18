@@ -46,7 +46,7 @@ pg.font.init()
 pg.display.set_caption('Dijkstra\'s pathfinding algorithm')
 
 clock = pg.time.Clock()
-FPS = 120 
+FPS = 5000 
 
 # blocksize for the grid
 blockSize = 9
