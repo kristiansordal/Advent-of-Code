@@ -5,7 +5,16 @@ import Data.Map (Map)
 import Data.Map qualified as Map
 import Data.Set (Set)
 import Data.Set qualified as Set
+import Text.Read
 import Text.Regex
+
+parseEither :: String -> (String, Either Integer String)
+parseEither s = (key, val')
+  where
+    [key, val] = splitOn ": " s
+    val' = case readMaybe val of
+      (Just num) -> Left num
+      Nothing -> Right val
 
 parseGroup :: [String] -> [Integer] -> [[Integer]]
 parseGroup [] ys = [ys]
