@@ -18,6 +18,9 @@ parseGroup (x : xs) ys
 parseNum :: String -> Integer
 parseNum = read
 
+parseInt :: String -> Int
+parseInt = read
+
 parseCharToNum :: String -> [Int]
 parseCharToNum [] = []
 parseCharToNum (x : xs)
@@ -102,11 +105,17 @@ remove (x : xs) n b
   | not b = x : remove xs n False
   | otherwise = x : remove xs n True
 
-update :: [a] -> a -> Integer -> [a]
+update :: [a] -> a -> Int -> [a]
 update l n x = nl
   where
     (f, s) = splitAt (fromIntegral x) l
     nl = f ++ [n] ++ tail s
+
+insert :: [a] -> a -> Int -> [a]
+insert l n x = nl
+  where
+    (f, s) = splitAt (fromIntegral x) l
+    nl = f ++ [n] ++ s
 
 manhattan :: (Integer, Integer) -> (Integer, Integer) -> Integer
 manhattan (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
