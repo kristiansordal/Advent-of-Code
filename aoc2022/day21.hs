@@ -5,17 +5,34 @@ import Functions
 
 main = do
   input <- map parseEither . lines <$> readFile "input/day21.in"
-  let ansP1 = getRoot (Map.fromList input) "root"
-  print ansP1
+  -- let ansP1 = getRoot (Map.fromList input) "root"
+  -- print ansP1
+  getRoot (Map.fromList input) "root"
 
-getRoot :: Map String (Either Integer String) -> String -> Integer
+getRoot :: Map String (Either Integer String) -> String -> IO Integer
 getRoot map key = case Map.lookup key map of
   Just val -> case val of
-    Left num -> num
+    Left num ->
+      if key == "humn"
+        then do
+          print (num + 1000)
+          return (num + 1000)
+        else return num
     Right str ->
       let comps = splitOn " " str
-       in eval (getRoot map (head comps)) (comps !! 1) (getRoot map (comps !! 2))
-  Nothing -> error "asf"
+       in do
+            num1 <- getRoot map (head comps)
+            num2 <- getRoot map (comps !! 2)
+            ( if (key == "humn") || (key == "root")
+                then
+                  ( do
+                      print num1
+                      print num2
+                      return $ eval num1 (comps !! 1) num2
+                  )
+                else return $ eval num1 (comps !! 1) num2
+              )
+  Nothing -> error ""
 
 eval :: Integer -> String -> Integer -> Integer
 eval x op y
