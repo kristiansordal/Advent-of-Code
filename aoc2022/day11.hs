@@ -38,8 +38,8 @@ turn ms fromMonkey t
           toMonkey = ms !! fromIntegral throw
           newMonkey = toMonkey {inspections = inspections toMonkey, items = items toMonkey ++ [testVal]}
           oldMonkey = fromMonkey {inspections = inspections fromMonkey + 1, items = remove (items fromMonkey) item False}
-          ms' = update ms newMonkey throw
-          ms'' = update ms' oldMonkey (num oldMonkey)
+          ms' = update ms newMonkey (fromIntegral throw)
+          ms'' = update ms' oldMonkey (fromIntegral (num oldMonkey))
        in turn ms'' (ms'' !! fromIntegral (num oldMonkey)) t
 
 operation :: ([String], Integer) -> Integer -> Integer

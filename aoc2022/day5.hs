@@ -19,10 +19,10 @@ moveCrates cs (y : ys) fun =
       t = cs !! (fromIntegral (y !! 2) - 1)
       newStack = fun f t (head y)
       crates = splitAt (fromIntegral (y !! 1) - 1) cs
-      crates'' = fst crates ++ fst newStack : drop 1 (snd crates)
-      crates''' = splitAt (fromIntegral (y !! 2) - 1) crates''
-      crates'''' = fst crates''' ++ snd newStack : drop 1 (snd crates''')
-   in moveCrates crates'''' ys fun
+      crates' = fst crates ++ fst newStack : drop 1 (snd crates)
+      crates'' = splitAt (fromIntegral (y !! 2) - 1) crates'
+      crates''' = fst crates'' ++ snd newStack : drop 1 (snd crates'')
+   in moveCrates crates''' ys fun
 
 moveCrateOne :: (Eq t, Num t) => [a] -> [a] -> t -> ([a], [a])
 moveCrateOne x y 0 = (x, y)
