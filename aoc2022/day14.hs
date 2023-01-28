@@ -35,10 +35,3 @@ world [] s = s
 world ([] : xs) s = world xs s
 world ([x] : xs) s = world xs (s ++ [[x]])
 world ((x : y : xs) : xss) s = world ((y : xs) : xss) (s ++ [seg x y])
-
-seg :: (Integer, Integer) -> (Integer, Integer) -> [(Integer, Integer)]
-seg (x1, y1) (x2, y2)
-  | x1 == x2 && y1 <= y2 = [(x1, y) | y <- [y1 .. y2]]
-  | x1 == x2 && y1 >= y2 = [(x1, y) | y <- [y2 .. y1]]
-  | y1 == y2 && x1 <= x2 = [(x, y1) | x <- [x1 .. x2]]
-  | y1 == y2 && x1 >= x2 = [(x, y1) | x <- [x2 .. x1]]

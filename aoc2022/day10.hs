@@ -10,7 +10,6 @@ main = do
       sum = cycSum cycl 0
       s = drawPixels cycl
 
-  print cycl
   print sum
   mapM_ printWithDelay (take 6 s)
 
