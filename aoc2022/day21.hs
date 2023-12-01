@@ -5,6 +5,8 @@ import Functions
 
 main = do
   input <- map parseEither . lines <$> readFile "input/day21.in"
+  print input
+
   -- let ansP1 = getRoot (Map.fromList input) "root"
   -- print ansP1
   getRoot (Map.fromList input) "root"
