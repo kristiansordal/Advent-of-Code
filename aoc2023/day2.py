@@ -1,27 +1,25 @@
 with open("input/2.in") as f:
     data = f.read().splitlines()
-    id_sum = 0
-    power_sum = 0
+    id_sum, power_sum = 0, 0
 
     for l in data:
         text, sets = l.split(":")[0], l.split(":")[1].split(" ")[1:]
         game_id = int(text.split(" ")[1])
-        mr, mg, mb = 0, 0, 0
-        valid = True
+        r, g, b, v = 0, 0, 0, 1
 
         for i in range(0, len(sets), 2):
             color = sets[i + 1].replace(",", "").replace(";", "")
             if color == "red":
-                mr = max(mr, int(sets[i]))
+                r = max(r, int(sets[i]))
             elif color == "green":
-                mg = max(mg, int(sets[i]))
+                g = max(g, int(sets[i]))
             elif color == "blue":
-                mb = max(mb, int(sets[i]))
+                b = max(b, int(sets[i]))
 
-            if mr > 12 or mg > 13 or mb > 14:
-                valid = False
+            if r > 12 or g > 13 or b > 14:
+                v = 0
 
-        id_sum += game_id if valid else 0
-        power_sum += mr * mb * mg
+        id_sum += game_id * v
+        power_sum += r * b * g
 
     print(f"P1: { id_sum}, P2: {power_sum}")
