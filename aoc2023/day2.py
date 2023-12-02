@@ -5,8 +5,7 @@ with open("input/2.in") as f:
     power_sum = 0
 
     for l in data:
-        text, sets = l.split(":")
-        sets = sets.split(" ")[1:]
+        text, sets = l.split(":")[0], l.split(":")[1].split(" ")[1:]
         game_id = int(text.split(" ")[1])
         r, g, b = [], [], []
         mr, mg, mb = 0, 0, 0
