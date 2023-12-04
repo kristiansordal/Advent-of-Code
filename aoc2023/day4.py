@@ -10,8 +10,7 @@ for i, l in enumerate(data):
     score += 2 ** (hits[i] - 1) if hits[i] > 0 else 0
 
 for i in range(len(cs)):
-    if counts[i] > 0:
-        for x in range(i + 1, i + 1 + hits[i]):
-            counts[x] += counts[i]
+    for j in range(i + 1, i + 1 + hits[i]):
+        counts[j] += counts[i]
 
 print(f"P1: {int(score)}, P2: {sum(counts)}")
