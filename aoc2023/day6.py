@@ -1,7 +1,7 @@
 from math import floor, ceil, prod
 
 D = open("input/6.in").read().splitlines()
-tds = list(zip(list(map(int, D[0].split()[1:])), list(map(int, D[1].split()[1:]))))
+tds = list(zip(map(int, D[0].split()[1:]), map(int, D[1].split()[1:])))
 tds.append((int((D[0].replace(" ", "")[5:])), int(D[1].replace(" ", "")[9:])))
 
 res = []
