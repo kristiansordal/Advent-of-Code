@@ -22,9 +22,7 @@ while "ZZZ" not in v:
     v.add(c)
     p1 += 1
 
-start_nodes = [n for n in nodes if n[-1] == "A"]
-
-p2 = []
+start_nodes, p2 = [n for n in nodes if n[-1] == "A"], []
 for n in start_nodes:
     s, c, v = 0, n, set()
 
