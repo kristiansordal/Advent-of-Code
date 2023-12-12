@@ -2,8 +2,10 @@ import numpy as np
 
 
 def search(grid, r, c):
+    file = open("input/10_vis.txt", "w")
     visited = {(r, c)}
     q = [(r, c)]
+    chars = {"|": "┃", "-": "━", "L": "┗", "J": "┛", "7": "┓", "F": "┏", "S": "S"}
 
     while q:
         r, c = q.pop()
@@ -12,7 +14,6 @@ def search(grid, r, c):
         if r < 0 or c < 0 or r >= len(grid) or c >= len(grid[0]):
             continue
 
-        # Left move
         if tile in "S|JL" and grid[r - 1][c] in "|7F" and (r - 1, c) not in visited:
             visited.add((r - 1, c))
             q.append((r - 1, c))
@@ -32,48 +33,37 @@ def search(grid, r, c):
             visited.add((r, c + 1))
             q.append((r, c + 1))
 
+    for i, r in enumerate(grid):
+        s = ""
+        for j, c in enumerate(r):
+            if (i, j) in visited:
+                s += chars[c]
+            else:
+                s += "."
+        file.write(s + "\n")
+    file.close()
+
     return visited
 
 
 def inside(grid, visited):
     bitmap = [[0 for _ in range(len(grid[0]))] for _ in range(len(grid))]
+    file = open("input/10_bitmap.txt", "w")
 
-    print(visited)
+    print(list(sorted(list(visited))))
+
     for r in range(len(grid)):
-        s = 0
-        for c in range(len(grid[0]) - 1):
-            if (r, c) not in visited and (r, c + 1) in visited:
-                bitmap[r][c] = s % 2 == 0
-                print(s)
-            elif (r, c + 1) in visited and (r, c) not in visited:
-                bitmap[r][c] = s % 2 == 0
-                s += 1
-                print(s)
+        b = 0
+        s = ""
+        for c in range(len(grid[0])):
+            if (r, c) in visited:
+                b |= 1 << c
+                s += "#"
             else:
-                bitmap[r][c] = s % 2 == 0
+                s += "."
 
-    for c in range(len(grid[0]) - 1):
-        s = 0
-        for r in range(len(grid)):
-            # if grid[r][c] == "." and (r, c + 1) in visited:
-            if (r, c) not in visited and (r, c + 1) in visited:
-                bitmap[r][c] &= s % 2 == 0
-                print(bitmap[r][c])
-            # elif (r, c) in visited and grid[r][c + 1] == ".":
-            elif (r, c + 1) in visited and (r, c) not in visited:
-                bitmap[r][c] &= s % 2 == 0
-                print(bitmap[r][c])
-                s += 1
-            else:
-                bitmap[r][c] = s % 2 == 0
-
-    count = 0
-    for l in bitmap:
-        for c in l:
-            if c:
-                count += 1
-    print(len(grid[0]) * len(grid) - count)
-    print(count)
+        file.write(s + "\n")
+    file.close()
 
 
 def main():
