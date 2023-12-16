@@ -13,39 +13,43 @@ def search(r, c, dir):
             visited.add((nr, nc))
             if D[nr][nc] == ".":
                 q.append((nr, nc, dir, v))
-                continue
 
-            if dir == RIGHT:
-                if D[nr][nc] == "\\": q.append((nr, nc, DOWN, v))
-                if D[nr][nc] == "/":  q.append((nr, nc, UP, v))
-                if D[nr][nc] == "-":  q.append((nr, nc, dir, v))
-                if D[nr][nc] == "|":
-                    v.add((nr, nc))
-                    q.append((nr, nc, UP, v)); q.append((nr, nc, DOWN, v))
+            elif dir == RIGHT:
+                match D[nr][nc]:
+                    case "\\": q.append((nr, nc, DOWN, v))
+                    case "/":  q.append((nr, nc, UP, v))
+                    case "-":  q.append((nr, nc, dir, v))
+                    case "|":
+                        v.add((nr, nc))
+                        q.append((nr, nc, UP, v)); q.append((nr, nc, DOWN, v))
 
-            if dir == LEFT:
-                if D[nr][nc] == "\\": q.append((nr, nc, UP, v))
-                if D[nr][nc] == "/":  q.append((nr, nc, DOWN, v))
-                if D[nr][nc] == "-":  q.append((nr, nc, dir, v))
-                if D[nr][nc] == "|":
-                    v.add((nr, nc))
-                    q.append((nr, nc, UP, v)); q.append((nr, nc, DOWN, v))
+            elif dir == LEFT:
+                match D[nr][nc]:
+                    case "\\": q.append((nr, nc, UP, v))
+                    case "/":  q.append((nr, nc, DOWN, v))
+                    case "-":  q.append((nr, nc, dir, v))
+                    case "|":
+                        v.add((nr, nc))
+                        q.append((nr, nc, UP, v)); q.append((nr, nc, DOWN, v))
 
-            if dir == DOWN:
-                if D[nr][nc] == "\\": q.append((nr, nc, RIGHT, v))
-                if D[nr][nc] == "/":  q.append((nr, nc, LEFT, v))
-                if D[nr][nc] == "|":  q.append((nr, nc, dir, v))
-                if D[nr][nc] == "-":
-                    v.add((nr, nc))
-                    q.append((nr, nc, RIGHT, v)); q.append((nr, nc, LEFT, v))
+            elif dir == DOWN:
+                match D[nr][nc]:
+                    case "\\": q.append((nr, nc, RIGHT, v))
+                    case "/":  q.append((nr, nc, LEFT, v))
+                    case "|":  q.append((nr, nc, dir, v))
+                    case "-":
+                        v.add((nr, nc))
+                        q.append((nr, nc, RIGHT, v)); q.append((nr, nc, LEFT, v))
 
-            if dir == UP:
-                if D[nr][nc] == "\\": q.append((nr, nc, LEFT, v))
-                if D[nr][nc] == "/":  q.append((nr, nc, RIGHT, v))
-                if D[nr][nc] == "|":  q.append((nr, nc, dir, v))
-                if D[nr][nc] == "-":
-                    v.add((nr, nc))
-                    q.append((nr, nc, RIGHT, v)); q.append((nr, nc, LEFT, v))
+            elif dir == UP:
+                match D[nr][nc]:
+                    case "\\": q.append((nr, nc, LEFT, v))
+                    case "/":  q.append((nr, nc, RIGHT, v))
+                    case "|":  q.append((nr, nc, dir, v))
+                    case "-":
+                        v.add((nr, nc))
+                        q.append((nr, nc, RIGHT, v)); q.append((nr, nc, LEFT, v))
+
     return len(visited)
 
 
