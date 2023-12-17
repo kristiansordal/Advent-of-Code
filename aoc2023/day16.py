@@ -1,3 +1,4 @@
+# fmt: off
 D = [[c for c in l] for l in open("input/16.in").read().splitlines()]
 RIGHT, LEFT, UP, DOWN = (0, 1), (0, -1), (-1, 0), (1, 0)
 
