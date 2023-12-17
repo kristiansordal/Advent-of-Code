@@ -1,53 +1,39 @@
-from heapq import heapify, heappop, heappush
+# fmt: off
+from collections import defaultdict
+from heapq import heappop, heappush
 
 D = [[int(x) for x in l] for l in open("input/17.in").read().splitlines()]
 
-
 def search(mi, mx):
-    s = (0, 0)
-    dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-    d, v, q = {s: 0}, set(), [(0, s, (0, 0), 1)]
-    heapify(q)
-    g = [["." for _ in range(len(D[0]))] for _ in range(len(D))]
-    pred = {s: None}
-    for i, r in enumerate(D):
-        for j, c in enumerate(r):
-            if (i, j) != (0, 0):
-                d[(i, j)] = 2**32  # pyright: ignore[reportGeneralTypeIssues]
-                heappush(q, (2**32, (i, j), (0, 0), 0))  # pyright: ignore[reportGeneralTypeIssues]
+    v = set()
+    dist = defaultdict(lambda: 2**32)
+    dist[(0, 0, (0, 0))] = 0
+    q: list[tuple] = [(0, 0, 0, (0, 0))]
+    dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
     while q:
-        w, (r, c), dir, cnt = heappop(q)
+        w, r, c, dir = heappop(q)
 
+        if (r, c) == (len(D) - 1, len(D[0]) - 1): return w
+        if (r, c, dir) in v: continue
+
+        v.add((r, c, dir))
         for dr, dc in dirs:
-            nr, nc = r + dr, c + dc
+            if (dr, dc) == dir or (dr * -1, dc * -1) == dir: continue
 
-            if 0 <= nr < len(D) and 0 <= nc < len(D[0]) and (nr, nc) not in v:
-                v.add((nr, nc))
+            nw = 0
+            for i in range(1, mx + 1):
+                nr, nc = r + dr * i, c + dc * i
 
-                if d[(nr, nc)] > w + D[nr][nc]:
-                    pred[(nr, nc)] = (r, c)
-                    if (dr, dc) != dir:
-                        d[(nr, nc)] = w + D[nr][nc]
-                        heappush(q, (w + D[nr][nc], (nr, nc), (dr, dc), 0))
-                    elif (dr, dc) == dir and cnt < mx:
-                        d[(nr, nc)] = w + D[nr][nc]
-                        heappush(q, (w + D[nr][nc], (nr, nc), dir, cnt + 1))
+                if 0 <= nr < len(D) and 0 <= nc < len(D[0]):
+                    nw += D[nr][nc]
 
-    # p = (len(D) - 1, len(D[0]) - 1)
-    # while p is not None:
-    #     g[p[0]][p[1]] = "#"
-    #     p = pred[p]
-    # with open("path.txt", "w") as f:
-    #     for r in g:
-    #         f.write("".join(r) + "\n")
+                    if i < mi: continue
 
-    return d[(len(D) - 1, len(D[0]) - 1)]
+                    if dist[(nr, nc, (dr, dc))] > w + nw:
+                        dist[(nr, nc, (dr, dc))] = w + nw
+                        heappush(q, (w + nw, nr, nc, (dr, dc)))
 
 
-# p1 = search(0, 3)
-p2 = search(4, 10)
-# print(p1)
-# print(p2)
-
-# print(d[(len(D) - 1, len(D[0]) - 1)])
+p1,p2 = search(1, 3),search(4, 10)
+print(f"P1: {p1}, P2: {p2}")
