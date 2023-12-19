@@ -26,9 +26,7 @@ class Range:
                 if before[1] > before[0]:
                     new_ranges.append(before)
                 if inside[1] > inside[0]:
-                    inside_ranges.append(
-                        (inside[0] - source + dest, inside[1] - source + dest)
-                    )
+                    inside_ranges.append((inside[0] - source + dest, inside[1] - source + dest))
                 if after[1] > after[0]:
                     new_ranges.append(after)
 
