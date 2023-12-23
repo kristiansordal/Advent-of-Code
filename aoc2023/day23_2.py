@@ -34,9 +34,8 @@ def init_graph(r, c, slopes=True):
 
         while q:
             rr, cc, d = q.pop()
-            if (rr, cc) in s:
-                continue
 
+            if (rr, cc) in s: continue
             s.add((rr, cc))
 
             if (rr, cc) in v and (r, c) != (rr, cc):
