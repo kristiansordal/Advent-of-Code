@@ -1,63 +1,87 @@
 # type: ignore
-import networkx as nx
-
 D = open("input/20.in").read().splitlines()
-g = nx.DiGraph()
+from math import lcm
+
+LO, HI, ON, OFF, FLIPFLOP, CONJUNCTION = 0, 1, 1, 0, "%", "&"
+
+
+class Module:
+    def __init__(self, name, typ, output):
+        self.name = name
+        self.typ = typ
+        self.output = output
+
+        if typ == FLIPFLOP:
+            self.memory = OFF
+        else:
+            self.memory = {}
+
+
+bcast = []
+modules = {}
 
 for d in D:
-    parts = d.split(" -> ")
-    vertex_info, neighbors = parts[0], parts[1].split(", ")
-    module = ""
+    f, t = d.strip().split(" -> ")
+    t = t.split(", ")
 
-    if not vertex_info[0].isalpha():
-        module, vertex = vertex_info[0], vertex_info[1:]
+    if f == "broadcaster":
+        bcast = t
     else:
-        vertex = vertex_info
+        typ = f[0]
+        name = f[1:]
+        modules[name] = Module(name, typ, t)
 
-    g.add_node(vertex, module=module, state=[False])
-    g.add_edges_from([(vertex, neighbor) for neighbor in neighbors])
+for n, m in modules.items():
+    for o in m.output:
+        if o in modules and modules[o].typ == CONJUNCTION:
+            modules[o].memory[n] = LO
 
-for n in g.nodes:
-    if g.out_degree(n) > 0 and g.nodes[n]["module"] == "&":
-        g.nodes[n]["state"] = {ni: False for ni in g.predecessors(n)}
+(feed,) = [n for n, m in modules.items() if "rx" in m.output]
+CYCLES = {}
+SEEN = {n: 0 for n, m in modules.items() if feed in m.output}
+lo, hi, ps = 0, 0, 0
+p1, p2 = 0, 0
 
+while True:
+    lo += 1
+    ps += 1
+    q = [("broadcaster", x, LO) for x in bcast]
 
-def search(g, root):
-    low, high = 0, 0
-    for _ in range(1000):
-        low += 1
-        q = [root]
+    while q:
+        f, t, p = q.pop(0)
 
-        while q:
-            v = q.pop(0)
+        if p == LO:
+            lo += 1
+        else:
+            hi += 1
 
-            for u in g.neighbors(v):
-                pulse = False
+        if ps == 1000:
+            p1 = lo * hi
 
-                if g.nodes[v]["module"] == "&":
-                    pulse = not all(g.nodes[v]["state"].values())
-                else:
-                    pulse = all(g.nodes[v]["state"])
+        if t not in modules:
+            continue
 
-                if not pulse and u == "rx":
-                    print("Hello")
+        m = modules[t]
 
-                if pulse:
-                    high += 1
-                else:
-                    low += 1
+        if m.name == feed and p == HI:
+            SEEN[f] += 1
 
-                if g.nodes[u] != {}:
-                    if g.nodes[u]["module"] == "%":
-                        if not pulse:
-                            g.nodes[u]["state"] = [not g.nodes[u]["state"][0]]
-                            q.append(u)
+            if f not in CYCLES:
+                CYCLES[f] = ps
 
-                    else:
-                        g.nodes[u]["state"][v] = pulse
-                        q.append(u)
-    return low, high
+            if all(SEEN.values()):
+                p2 = lcm(*CYCLES.values())
+                print(f"P1: {p1}, P2: {p2}")
+                exit()
 
-
-low, high = search(g, "broadcaster")
-print(low * high)
+        if m.typ == FLIPFLOP:
+            if p == LO:
+                m.memory = ON if not m.memory else OFF
+                out = HI if m.memory else LO
+                for n in m.output:
+                    q.append((m.name, n, out))
+        else:
+            m.memory[f] = p
+            out = LO if all(x for x in m.memory.values()) else HI
+            for n in m.output:
+                q.append((m.name, n, out))
